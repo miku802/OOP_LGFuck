@@ -47,7 +47,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		"Resources/mycar12.bmp"
 	});
 	My_car.SetTopLeft(0, 0);
-	My_car.SetAnimation(1000, true);
 
 }
 
@@ -103,15 +102,22 @@ void CGameStateRun::OnShow()
 
 void CGameStateRun::Turn_my_car()							//我方車車轉圈圈
 {
-	if (My_car_now_derect > My_car_goal_derect)
+	if (My_car_now_derect == 0 && My_car_goal_derect == 9)
 	{
-		My_car.SetFrameIndexOfBitmap(My_car_now_derect - 1);
-		My_car_now_derect--;
+		My_car_now_derect = 11;
 	}
-	else if (My_car_now_derect < My_car_goal_derect)
+	else if (My_car_now_derect < My_car_goal_derect || (My_car_now_derect >= 9 && My_car_goal_derect == 0))
 	{
-		My_car.SetFrameIndexOfBitmap(My_car_now_derect + 1);
 		My_car_now_derect++;
 	}
+	else if (My_car_now_derect > My_car_goal_derect)
+	{
+		My_car_now_derect--;
+	}
+	if (My_car_now_derect > 11) 
+	{
+		My_car_now_derect = 0;
+	}
+	My_car.SetFrameIndexOfBitmap(My_car_now_derect);
 	return;
 }
