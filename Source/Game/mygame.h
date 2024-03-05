@@ -91,6 +91,11 @@ namespace game_framework {
 	protected:
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
+	private:
+		int My_car_goal_derect = 0;
+		int My_car_now_derect = 0;
+		CMovingBitmap My_car;
+		void Turn_my_car();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
