@@ -28,6 +28,7 @@ void CGameStateRun::OnBeginState()
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 	Turn_my_car();
+	move_background();
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -45,9 +46,11 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		"Resources/mycar10.bmp",
 		"Resources/mycar11.bmp",
 		"Resources/mycar12.bmp"
-	});
-	My_car.SetTopLeft(0, 0);
+		});
+	My_car.SetTopLeft(400, 250);
 
+	Background_road.LoadBitmapByString({"Resources/road.bmp"});
+	Background_road.SetTopLeft(-200, -100);
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -97,7 +100,8 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnShow()
 {
-	My_car.ShowBitmap();
+	Background_road.ShowBitmap(6);
+	My_car.ShowBitmap(0.1);
 }
 
 void CGameStateRun::Turn_my_car()							//我方車車轉圈圈
@@ -120,4 +124,26 @@ void CGameStateRun::Turn_my_car()							//我方車車轉圈圈
 	}
 	My_car.SetFrameIndexOfBitmap(My_car_now_derect);
 	return;
+}
+
+void CGameStateRun::move_background()
+{
+	switch (My_car_now_derect)
+	{
+	case 0:
+		Background_road_now[1] += speed;
+		break;
+	case 3:
+		Background_road_now[0] -= speed;
+		break;
+	case 6:
+		Background_road_now[1] -= speed;
+		break;
+	case 9:
+		Background_road_now[0] += speed;
+		break;
+	default:
+		break;
+	}
+	Background_road.SetTopLeft(Background_road_now[0], Background_road_now[1]);
 }
