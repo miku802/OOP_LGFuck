@@ -92,10 +92,15 @@ namespace game_framework {
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
-		int My_car_goal_derect = 0;
+		int My_car_goal_derect = 0;						//我方車車
 		int My_car_now_derect = 0;
 		CMovingBitmap My_car;
 		void Turn_my_car();
+
+		int speed = 10;
+		int Background_road_now[2] = { 0, 0 };
+		CMovingBitmap Background_road;                  //關卡背景
+		void move_background();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
