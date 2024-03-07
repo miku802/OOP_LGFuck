@@ -6,6 +6,8 @@
 #include "../Library/gameutil.h"
 #include "../Library/gamecore.h"
 #include "mygame.h"
+#include <iostream>
+#include <fstream>  // 包含處理檔案的功能
 
 using namespace game_framework;
 
@@ -27,13 +29,13 @@ void CGameStateRun::OnBeginState()
 
 void CGameStateRun::OnMove()							// 移動遊戲元素
 {
-	Turn_my_car();
+	turn_my_car();
 	move_background();
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 {
-	My_car.LoadBitmapByString({								//我方車車
+	my_car.LoadBitmapByString({								//我方車車
 		"Resources/mycar1.bmp",
 		"Resources/mycar2.bmp",
 		"Resources/mycar3.bmp",
@@ -47,29 +49,31 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		"Resources/mycar11.bmp",
 		"Resources/mycar12.bmp"
 		});
-	My_car.SetTopLeft(400, 250);
+	my_car.SetTopLeft(401, 157);
 
-	Background_road.LoadBitmapByString({"Resources/road.bmp"});
-	Background_road.SetTopLeft(-200, -100);
+	background_road.LoadBitmapByString({"Resources/road.bmp"});
+	background_road.SetTopLeft(background_location_now[0], background_location_now[1]);
+
+	make_map();
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	if (nChar == VK_UP)
 	{
-		My_car_goal_derect = 0;
+		my_car_derect_goal = 0;
 	}
 	else if(nChar == VK_RIGHT)
 	{
-		My_car_goal_derect = 3;
+		my_car_derect_goal = 3;
 	}
 	else if (nChar == VK_DOWN)
 	{
-		My_car_goal_derect = 6;
+		my_car_derect_goal = 6;
 	}
 	else if (nChar == VK_LEFT)
 	{
-		My_car_goal_derect = 9;
+		my_car_derect_goal = 9;
 	}
 }
 
@@ -100,50 +104,69 @@ void CGameStateRun::OnRButtonUp(UINT nFlags, CPoint point)	// 處理滑鼠的動作
 
 void CGameStateRun::OnShow()
 {
-	Background_road.ShowBitmap(6);
-	My_car.ShowBitmap(0.1);
+	background_road.ShowBitmap(8);
+	my_car.ShowBitmap(0.095);
 }
 
-void CGameStateRun::Turn_my_car()							//我方車車轉圈圈
+void CGameStateRun::turn_my_car()							//我方車車轉圈圈
 {
-	if (My_car_now_derect == 0 && My_car_goal_derect == 9)
+	if (my_car_derect_now == 0 && my_car_derect_goal == 9)
 	{
-		My_car_now_derect = 11;
+		my_car_derect_now = 11;
 	}
-	else if (My_car_now_derect < My_car_goal_derect || (My_car_now_derect >= 9 && My_car_goal_derect == 0))
+	else if (my_car_derect_now < my_car_derect_goal || (my_car_derect_now >= 9 && my_car_derect_goal == 0))
 	{
-		My_car_now_derect++;
+		my_car_derect_now++;
 	}
-	else if (My_car_now_derect > My_car_goal_derect)
+	else if (my_car_derect_now > my_car_derect_goal)
 	{
-		My_car_now_derect--;
+		my_car_derect_now--;
 	}
-	if (My_car_now_derect > 11) 
+	if (my_car_derect_now > 11)
 	{
-		My_car_now_derect = 0;
+		my_car_derect_now = 0;
 	}
-	My_car.SetFrameIndexOfBitmap(My_car_now_derect);
+	my_car.SetFrameIndexOfBitmap(my_car_derect_now);
 	return;
 }
 
-void CGameStateRun::move_background()
+void CGameStateRun::move_background()			//移動背景
 {
-	switch (My_car_now_derect)
+	switch (my_car_derect_now)
 	{
 	case 0:
-		Background_road_now[1] += speed;
+		if (map_test1[6 - (background_location_now[0] / 64 + 5)][6 - (background_location_now[1] / 64 + 2 )] == 1)
+		{
+			speed = 0;
+			break;//left up     ( 0, 4) (-4, 4)
+		}		  // right down ( 0, 0) (-4, 0)
+		background_location_now[1] += speed;
 		break;
 	case 3:
-		Background_road_now[0] -= speed;
+		background_location_now[0] -= speed;
 		break;
 	case 6:
-		Background_road_now[1] -= speed;
+		background_location_now[1] -= speed;
 		break;
 	case 9:
-		Background_road_now[0] += speed;
+		background_location_now[0] += speed;
 		break;
+
 	default:
 		break;
 	}
-	Background_road.SetTopLeft(Background_road_now[0], Background_road_now[1]);
+	background_road.SetTopLeft(background_location_now[0]+320, background_location_now[1]-85);
+}
+
+void CGameStateRun::make_map() 
+{
+	for (int i = 0; i < 100; i++)
+		for (int j = 0; j < 100; j++)
+			map_test1[i][j] = 1;
+
+	std::ifstream inputfile("Resources_map/map_test.txt");
+	for (int i=0; i<7; i++)
+		for (int j = 0; j < 7; j++)
+			inputfile >> map_test1[i][j];
+	return;
 }

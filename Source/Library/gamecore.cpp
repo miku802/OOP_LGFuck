@@ -945,10 +945,11 @@ namespace game_framework {
 			};
 			for (int i = 0; i < sizeof(ErrorCode) / sizeof(int); i++)
 				if (ddrval == ErrorCode[i])
-					GAME_ASSERT(0, ErrorMsg[i]);
+						GAME_ASSERT(0, ErrorMsg[i]);
 			GAME_ASSERT(0, "Direct Draw Failed due to unknown error code !!!");
 		}
 	}
+
 
 	/////////////////////////////////////////////////////////////////////////////
 	// 這個class為遊戲的各種狀態之Base class(是一個abstract class)

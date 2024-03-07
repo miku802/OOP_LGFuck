@@ -66,8 +66,8 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		CMovingBitmap logo;								// csie的logo
-		void load_background();
-		CMovingBitmap background;
+		//void load_background();
+		//CMovingBitmap background;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -92,15 +92,18 @@ namespace game_framework {
 		void OnMove();									// 移動遊戲元素
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
-		int My_car_goal_derect = 0;						//我方車車
-		int My_car_now_derect = 0;
-		CMovingBitmap My_car;
-		void Turn_my_car();
+		int my_car_derect_goal = 0;			//我方車車
+		int my_car_derect_now = 0;
+		CMovingBitmap my_car;
+		void turn_my_car();
 
-		int speed = 10;
-		int Background_road_now[2] = { 0, 0 };
-		CMovingBitmap Background_road;                  //關卡背景
+		int speed = 0;
+		int background_location_now[2] = { 0 , 0 };
+		CMovingBitmap background_road;                  //關卡背景
 		void move_background();
+
+		int map_test1[100][100];
+		void make_map();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////

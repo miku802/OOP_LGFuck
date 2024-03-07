@@ -26,19 +26,21 @@ void CGameStateInit::OnInit()
 	//
 	// 開始載入資料
 
-	load_background();
+	//load_background();
 
 	// 此OnInit動作會接到CGameStaterRun::OnInit()，所以進度還沒到100%
 	//
 }
 
+/*
 void CGameStateInit::load_background()
 {
-	background.LoadBitmap({ "resources/2.bmp", "resources/3.bmp" });
+	background.LoadBitmap({ "resources/falg.bmp", "resources/flag.bmp" });
 	background.SetTopLeft(0, 0);
 	background.SetAnimation(4000, true);
 	background.ToggleAnimation();
 }
+*/
 
 void CGameStateInit::OnBeginState()
 {
@@ -56,5 +58,5 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CGameStateInit::OnShow()
 {
-	background.ShowBitmap();
+	//background.ShowBitmap();
 }
