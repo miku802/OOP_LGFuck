@@ -97,8 +97,8 @@ namespace game_framework {
 		CMovingBitmap my_car;
 		void turn_my_car();
 
-		int speed = 0;
-		int background_location_now[2] = { 0 , 0 };
+		int speed = 10;
+		int background_location_now[2];
 		CMovingBitmap background_road;                  //Ãö¥d­I´º
 		void move_background();
 
