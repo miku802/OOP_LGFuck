@@ -13,4 +13,4 @@ cl : 命令列 warning D9035: 選項 'Gm' 已被取代，在未來的發行版�
   game.cpp
   正在產生程式碼...
 game.obj : warning LNK4075: 忽略 '/EDITANDCONTINUE'，由於 '/SAFESEH' 規格
-  game.vcxproj -> C:\Users\a3089\Desktop\trash\oop\OOP_LGFuck\.\Debug\game.exe
+  game.vcxproj -> C:\Users\a3089\Desktop\all oop\OOP_LGFuck now best save\.\Debug\game.exe
