@@ -12,8 +12,9 @@
 
 using namespace game_framework;
 
-#define percent 50
+#define percent 30
 #define map_to_zero 7
+#define normal_speed 1
 
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
@@ -53,13 +54,13 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		"Resources/mycar11.bmp",
 		"Resources/mycar12.bmp"
 		});
-	my_car.SetTopLeft(356, 356); // 7 * percent
+	my_car.SetTopLeft(7 * percent + 7, 7 * percent + 7);
 
-	background_road.LoadBitmapByString({"Resources/road.bmp"});
+	background_road.LoadBitmapByString({"Resources/road hard.bmp"});
 	background_road.SetTopLeft(background_location_now[0], background_location_now[1]);
-	background_location_now[0] = (-1 + map_to_zero) * percent;//25,51
-	background_location_now[1] = (-1 + map_to_zero) * percent;
-	background_road.SetTopLeft(background_location_now[0], background_location_now[1]);
+	background_location_now[0] = (-1 + map_to_zero);//25,51
+	background_location_now[1] = (-1 + map_to_zero);
+	background_road.SetTopLeft(background_location_now[0] * percent, background_location_now[1] * percent);
 
 	make_map();
 }
@@ -67,7 +68,7 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 void CGameStateRun::OnShow()
 {
 	background_road.ShowBitmap(0.2 * percent);
-	my_car.ShowBitmap(0.002 * percent); // 0.0025
+	my_car.ShowBitmap(0.0020 * percent); // 0.0025
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -133,6 +134,7 @@ void CGameStateRun::turn_my_car()							//我方車車轉圈圈
 	{
 		my_car_derect_now = 0;
 	}
+	if (my_car_derect_now == my_car_derect_goal)speed = 20;
 	my_car.SetFrameIndexOfBitmap(my_car_derect_now);
 	return;
 }
@@ -140,33 +142,34 @@ void CGameStateRun::turn_my_car()							//我方車車轉圈圈
 void CGameStateRun::move_background()			//移動背景
 {
 	if (my_car_derect_now != my_car_derect_goal)speed = 0;
-	else speed = 8;
+	else speed = normal_speed;
 	switch (my_car_derect_now)
 	{
 	case 0:
-		if (map_test1[-(background_location_now[0]/percent - map_to_zero)][-(background_location_now[1]/percent - map_to_zero) - 1] == 1)
+		if (map_test1[-(background_location_now[0] - map_to_zero)][-(background_location_now[1] - map_to_zero + 1)] == 1)
 			return;
 		background_location_now[1] += speed;
 		break;
 	case 3:
-		if (map_test1[-(background_location_now[0] / percent - map_to_zero) + 1][-(background_location_now[1] / percent - map_to_zero)] == 1)
+		if (map_test1[-(background_location_now[0] - map_to_zero - 1)][-(background_location_now[1] - map_to_zero)] == 1)
 			return;
 		background_location_now[0] -= speed;
 		break;
 	case 6:
-		if (map_test1[-(background_location_now[0] / percent - map_to_zero)][-(background_location_now[1]/percent - map_to_zero) + 1] == 1)
+		if (map_test1[-(background_location_now[0] - map_to_zero)][-(background_location_now[1] - map_to_zero - 1)] == 1)
 			return;
 		background_location_now[1] -= speed;
 		break;
 	case 9:
-		if (map_test1[-(background_location_now[0] / percent - map_to_zero) - 1][-(background_location_now[1] / percent - map_to_zero)] == 1)
+		if (map_test1[-(background_location_now[0] - map_to_zero + 1)][-(background_location_now[1] - map_to_zero)] == 1)
 			return;
 		background_location_now[0] += speed;
 		break;
+
 	default:
 		break;
 	}
-	background_road.SetTopLeft(background_location_now[0], background_location_now[1]);
+	background_road.SetTopLeft(background_location_now[0] * percent, background_location_now[1] * percent);
 }
 
 void CGameStateRun::make_map() // now 30*50
@@ -175,7 +178,7 @@ void CGameStateRun::make_map() // now 30*50
 		for (int j = 0; j < 100; j++)
 			map_test1[i][j] = -1;
 
-	std::ifstream inputfile("Resources_map/map_test.txt");
+	std::ifstream inputfile("Resources_map/map_test hard.txt");
 	for (int i=0; i<10; i++)
 		for (int j = 0; j < 10; j++)
 			inputfile >> map_test1[j][i];
