@@ -2,8 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\Source",
-    "\\Source\\Game",
-    "\\Source\\Library"
+    "\\Source\\Game"
   ],
   "SelectedNode": "\\Source\\Game\\mygame_run.cpp",
   "PreviewInSolutionExplorer": false

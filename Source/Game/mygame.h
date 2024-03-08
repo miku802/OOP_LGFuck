@@ -96,14 +96,18 @@ namespace game_framework {
 		int my_car_derect_now = 0;
 		CMovingBitmap my_car;
 		void turn_my_car();
+		int random_num;
 
-		int speed = 10;
+		int speed = 0;
 		int background_location_now[2];
 		CMovingBitmap background_road;                  //Ãö¥d­I´º
 		void move_background();
+		int move[2] = { 0,0 };
 
-		int map_test1[100][100];
+		int map_test1[40][65];
 		void make_map();
+		void mudamudamudamuda();
+		int muda_bool = 0;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
