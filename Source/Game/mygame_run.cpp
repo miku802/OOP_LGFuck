@@ -14,8 +14,8 @@ using namespace game_framework;
 
 #define percent 50
 #define map_to_zero 7
-#define normal_speed 50
-#define path_map1 "map1"
+#define normal_speed 59
+#define path_map1 "map3"
 
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
@@ -234,7 +234,7 @@ void CGameStateRun::move_background()			//移動背景
 	background_road.SetTopLeft(background_location_now[0] * percent + move[1]/2, background_location_now[1] * percent + move[0]/2);
 }
 
-void CGameStateRun::make_map() // now 30*50
+void CGameStateRun::make_map()
 {
 	for (int i = 0; i < 65; i++)
 		for (int j = 0; j < 40; j++)
