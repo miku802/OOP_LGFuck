@@ -13,9 +13,10 @@
 using namespace game_framework;
 
 #define percent 50
-#define map_to_zero 7
-#define normal_speed 59
-#define path_map1 "map3"
+#define map_x 0
+#define map_y 0
+#define normal_speed 100
+#define path_map1 "map1"
 
 /////////////////////////////////////////////////////////////////////////////
 // 這個class為遊戲的遊戲執行物件，主要的遊戲程式都在這裡
@@ -55,12 +56,12 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		"Resources/mycar11.bmp",
 		"Resources/mycar12.bmp"
 		});
-	my_car.SetTopLeft(7 * percent + 5, 7 * percent + 7);
+	my_car.SetTopLeft((map_x + 7) * percent + 5, (map_y + 7) * percent + 7);
 
 	background_road.LoadBitmapByString({"Resources/" + string(path_map1) + ".bmp"});
 	background_road.SetTopLeft(background_location_now[0], background_location_now[1]);
-	background_location_now[0] = (-16 + map_to_zero);//-16
-	background_location_now[1] = (-50 + map_to_zero);//-50
+	background_location_now[0] = (-16 + map_x);//-16
+	background_location_now[1] = (-50 + map_y);//-50
 	background_road.SetTopLeft(background_location_now[0] * percent, background_location_now[1] * percent);
 
 	make_map();
@@ -89,22 +90,22 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 	if (nChar == VK_UP)
 	{
-		if (map_test1[-int((background_location_now[0] - map_to_zero))][-int((background_location_now[1] - map_to_zero + 1))] == 1)return;
+		if (map_test1[-int((background_location_now[0] - map_x))][-int((background_location_now[1] - map_y + 1))] == 1)return;
 		my_car_derect_goal = 0;
 	}
 	else if(nChar == VK_RIGHT)
 	{
-		if (map_test1[-int((background_location_now[0] - map_to_zero - 1))][-int((background_location_now[1] - map_to_zero))] == 1)return;
+		if (map_test1[-int((background_location_now[0] - map_x - 1))][-int((background_location_now[1] - map_y))] == 1)return;
 		my_car_derect_goal = 3;
 	}
 	else if (nChar == VK_DOWN)
 	{
-		if (map_test1[-int((background_location_now[0] - map_to_zero))][-int((background_location_now[1] - map_to_zero - 1))] == 1)return;
+		if (map_test1[-int((background_location_now[0] - map_x))][-int((background_location_now[1] - map_y - 1))] == 1)return;
 		my_car_derect_goal = 6;
 	}
 	else if (nChar == VK_LEFT)
 	{
-		if (map_test1[-int((background_location_now[0] - map_to_zero + 1))][-int((background_location_now[1] - map_to_zero))] == 1)return;
+		if (map_test1[-int((background_location_now[0] - map_x + 1))][-int((background_location_now[1] - map_y))] == 1)return;
 		my_car_derect_goal = 9;
 	}
 }
@@ -164,10 +165,10 @@ void CGameStateRun::move_background()			//移動背景
 	switch (my_car_derect_now)
 	{
 	case 0:
-		if (map_test1[-int((background_location_now[0] - map_to_zero))][-int((background_location_now[1] - map_to_zero + 1))] == 1)
+		if (map_test1[-int((background_location_now[0] - map_x))][-int((background_location_now[1] - map_y + 1))] == 1)
 		{
 			my_car_derect_goal = 3;
-			if (map_test1[-int((background_location_now[0] - map_to_zero - 1))][-int((background_location_now[1] - map_to_zero))] == 1)
+			if (map_test1[-int((background_location_now[0] - map_x - 1))][-int((background_location_now[1] - map_y))] == 1)
 				my_car_derect_goal = 9;
 			return;
 		}
@@ -180,10 +181,10 @@ void CGameStateRun::move_background()			//移動背景
 		}
 		break;
 	case 3:
-		if (map_test1[-int((background_location_now[0] - map_to_zero - 1))][-int((background_location_now[1] - map_to_zero))] == 1)
+		if (map_test1[-int((background_location_now[0] - map_x - 1))][-int((background_location_now[1] - map_y))] == 1)
 		{
 			my_car_derect_goal = 6;
-			if (map_test1[-int((background_location_now[0] - map_to_zero))][-int((background_location_now[1] - map_to_zero - 1))] == 1)
+			if (map_test1[-int((background_location_now[0] - map_x))][-int((background_location_now[1] - map_y - 1))] == 1)
 				my_car_derect_goal = 0;
 			return;
 		}
@@ -196,10 +197,10 @@ void CGameStateRun::move_background()			//移動背景
 		}
 		break;
 	case 6:
-		if (map_test1[-int((background_location_now[0] - map_to_zero))][-int((background_location_now[1] - map_to_zero - 1))] == 1)
+		if (map_test1[-int((background_location_now[0] - map_x))][-int((background_location_now[1] - map_y - 1))] == 1)
 		{
 			my_car_derect_goal = 9;
-			if (map_test1[-int((background_location_now[0] - map_to_zero + 1))][-int((background_location_now[1] - map_to_zero))] == 1)
+			if (map_test1[-int((background_location_now[0] - map_x + 1))][-int((background_location_now[1] - map_y))] == 1)
 				my_car_derect_goal = 3;
 			return;
 		}
@@ -212,10 +213,10 @@ void CGameStateRun::move_background()			//移動背景
 		}
 		break;
 	case 9:
-		if (map_test1[-int((background_location_now[0] - map_to_zero + 1))][-int((background_location_now[1] - map_to_zero))] == 1)
+		if (map_test1[-int((background_location_now[0] - map_x + 1))][-int((background_location_now[1] - map_y))] == 1)
 		{
 			my_car_derect_goal = 0;
-			if (map_test1[-int((background_location_now[0] - map_to_zero))][-int((background_location_now[1] - map_to_zero + 1))] == 1)
+			if (map_test1[-int((background_location_now[0] - map_x))][-int((background_location_now[1] - map_y + 1))] == 1)
 				my_car_derect_goal = 6;
 			return;
 		}
