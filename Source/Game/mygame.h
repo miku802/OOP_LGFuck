@@ -104,10 +104,14 @@ namespace game_framework {
 		void move_background();
 		int move[2] = { 0,0 };
 
-		int map_test1[40][65];
+		int map_array[40][65];
 		void make_map();
 		void mudamudamudamuda();
 		int muda_bool = 0;
+
+		CMovingBitmap rock[10];
+		int rock_x[10], rock_y[10];
+		int touch_rock();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
