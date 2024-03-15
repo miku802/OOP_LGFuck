@@ -9,6 +9,7 @@
 #include "config.h"
 #include <iostream>
 #include <random>
+#include <string>
 #include <cstdlib>
 #include <fstream>  // 包含處理檔案的功能
 
@@ -39,6 +40,8 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 {
 	turn_my_car();
 	move_background();
+	touch_flag();
+	touch_rock();
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -66,20 +69,35 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	background_road.SetTopLeft(background_location_now[0] * my_percent, background_location_now[1] * my_percent);
 
 	make_map();
+	std::random_device rd;  // 用來獲得隨機數種子
+	std::mt19937 gen(rd()); // 以隨機數種子初始化Mersenne Twister產生器
+	std::uniform_int_distribution<> distr(1, 100); // 定義一個從1到100的均勻分佈
 
 	for (int i = 0; i < 10; i++)
 	{
+		rock[i].LoadBitmapByString({ "Resources/rock.bmp" });
+		do
+		{
+			rock_x[i] = (distr(gen)) % 35;
+			rock_y[i] = (distr(gen)) % 59;
+		} while (map_array[rock_x[i]][rock_y[i]] == 1);
+		map_array[rock_x[i]][rock_y[i]] = 1;
+	}
+
+	for (int i = 0; i < 100; i++)
+	{
+		flag[i].LoadBitmapByString({ "Resources/flag.bmp" });
 		do
 		{
 			std::random_device rd;  // 用來獲得隨機數種子
 			std::mt19937 gen(rd()); // 以隨機數種子初始化Mersenne Twister產生器
-			std::uniform_int_distribution<> distr(1, 100); // 定義一個從1到100的均勻分佈
-			rock_x[i] = (distr(gen)) % 35;
-			rock_y[i] = (distr(gen)) % 59;
-		} while (map_array[rock_x[i]][rock_y[i]] == 1);
-		rock[i].LoadBitmapByString({ "Resources/rock.bmp" });
-		
+			flag_x[i] = (distr(gen)) % 35;
+			flag_y[i] = (distr(gen)) % 59;
+		} while (map_array[flag_x[i]][flag_y[i]] == 1);
 	}
+
+	black.LoadBitmapByString({ "Resources/black.bmp" });
+	black.SetTopLeft(750, 0);
 }
 
 void CGameStateRun::OnShow()
@@ -88,8 +106,16 @@ void CGameStateRun::OnShow()
 	for (int i = 0; i < 10; i++)
 	{
 		rock[i].ShowBitmap(0.0022 * my_percent);
+		for(int j=0; j<10; j++)
+			flag[i*10 + j].ShowBitmap(0.0017 * my_percent);
 	}
 	my_car.ShowBitmap(0.0018 * my_percent); // 0.0025
+	black.ShowBitmap(5);
+
+	CDC *pDC = CDDraw::GetBackCDC();
+	CTextDraw::ChangeFontLog(pDC, 50, "微軟正黑體", RGB(255, 255, 255), 500);
+	CTextDraw::Print(pDC, 800, 200, "score：" + std::to_string(get_point));
+	CDDraw::ReleaseBackCDC();
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -177,26 +203,36 @@ void CGameStateRun::turn_my_car()							//我方車車轉圈圈
 	return;
 }
 
-int CGameStateRun::touch_rock()
+void CGameStateRun::touch_rock()
 {
 	for (int i = 0; i < 10; i++)
 	{
 		if (-(background_location_now[0]) == rock_x[i] && (-(background_location_now[1])) == rock_y[i])
-			return 1;
+		{
+			speed = 0;
+			my_car_derect_goal += 3;
+			if (my_car_derect_goal == 12) { my_car_derect_goal = 0; }
+			turn_my_car();
+		}
 	}
-	return 0;
+}
+
+void CGameStateRun::touch_flag()
+{
+	for (int i = 0; i < 100; i++)
+	{
+		if (-(background_location_now[0]) == flag_x[i] && (-(background_location_now[1])) == flag_y[i])
+		{
+			flag_x[i] = -100;
+			flag_y[i] = -100;
+			get_point += 100;
+		}
+	}
 }
 
 void CGameStateRun::move_background()			//移動背景
 {
 	if (my_car_derect_now != my_car_derect_goal)return;
-	else if (touch_rock())
-	{
-		speed = 0;
-		my_car_derect_goal += 3;
-		if (my_car_derect_goal == 12) { my_car_derect_goal = 0; }
-		turn_my_car();
-	}
 	else speed = normal_speed;
 	switch (my_car_derect_now)
 	{
@@ -272,6 +308,8 @@ void CGameStateRun::move_background()			//移動背景
 	for (int i = 0; i < 10; i++)
 	{
 		rock[i].SetTopLeft((background_location_now[0] + rock_x[i] + 7) * my_percent + move[1] / 2 + 3, (background_location_now[1] + rock_y[i] + 7)* my_percent + move[0] / 2 + 3);
+		for(int j=0; j<10; j++)
+			flag[i*10 + j].SetTopLeft((background_location_now[0] + flag_x[i*10 + j] + 7) * my_percent + move[1] / 2 + 3, (background_location_now[1] + flag_y[i*10 + j] + 7)* my_percent + move[0] / 2 + 3);
 	}
 }
 

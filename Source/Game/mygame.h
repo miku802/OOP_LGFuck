@@ -111,7 +111,15 @@ namespace game_framework {
 
 		CMovingBitmap rock[10];
 		int rock_x[10], rock_y[10];
-		int touch_rock();
+		void touch_rock();
+
+		CMovingBitmap flag[100];
+		int flag_x[100], flag_y[100];
+		void touch_flag();
+
+		int get_point = 0;
+
+		CMovingBitmap black;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
