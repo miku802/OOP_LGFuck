@@ -15,8 +15,11 @@
 
 using namespace game_framework;
 
-#define normal_speed 20
+#define normal_speed 50
 #define path_map1 "map1"
+#define small_map_x 755
+#define small_map_y 220
+#define small_map_percent 8
 //#define rock_x 20
 //#define rock_y 49
 
@@ -41,7 +44,6 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	turn_my_car();
 	move_background();
 	touch_flag();
-	touch_rock();
 }
 
 void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
@@ -81,10 +83,10 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 			rock_x[i] = (distr(gen)) % 35;
 			rock_y[i] = (distr(gen)) % 59;
 		} while (map_array[rock_x[i]][rock_y[i]] == 1);
-		map_array[rock_x[i]][rock_y[i]] = 1;
+		map_array[rock_x[i]][rock_y[i]] = 2;
 	}
 
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		flag[i].LoadBitmapByString({ "Resources/flag.bmp" });
 		do
@@ -96,8 +98,20 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 		} while (map_array[flag_x[i]][flag_y[i]] == 1);
 	}
 
-	black.LoadBitmapByString({ "Resources/black.bmp" });
-	black.SetTopLeft(750, 0);
+	right_black.LoadBitmapByString({ "Resources/black.bmp" });
+	right_black.SetTopLeft(750, 0);
+
+	small_my_car.LoadBitmapByString({ "Resources/small car 1.bmp" , "Resources/small car 2.bmp"});
+	small_my_car.SetAnimation(200, false);
+	small_my_car.SetTopLeft(small_map_x - background_location_now[0] * 4, small_map_y - background_location_now[1] * 4);
+
+	small_map.LoadBitmapByString({ "Resources/small map.bmp" });
+	small_map.SetTopLeft(small_map_x, small_map_y);
+	for (int i = 0; i < 10; i++)
+	{
+		small_flag[i].LoadBitmapByString({ "Resources/small flag.bmp" });
+		small_flag[i].SetTopLeft(flag_x[i] * small_map_percent + small_map_x, flag_y[i] *  small_map_percent + small_map_y);
+	}
 }
 
 void CGameStateRun::OnShow()
@@ -106,15 +120,23 @@ void CGameStateRun::OnShow()
 	for (int i = 0; i < 10; i++)
 	{
 		rock[i].ShowBitmap(0.0022 * my_percent);
-		for(int j=0; j<10; j++)
-			flag[i*10 + j].ShowBitmap(0.0017 * my_percent);
+		flag[i].ShowBitmap(0.0017 * my_percent);
+		small_flag[i];
 	}
+	right_black.ShowBitmap(5);
 	my_car.ShowBitmap(0.0018 * my_percent); // 0.0025
-	black.ShowBitmap(5);
+
+	small_map.ShowBitmap(0.1 * small_map_percent);
+	for (int i = 0; i < 10; i++)
+	{
+		if(flag_x[i] != -100)
+			small_flag[i].ShowBitmap(0.1 * small_map_percent);
+	}
+	small_my_car.ShowBitmap(0.1 * small_map_percent);
 
 	CDC *pDC = CDDraw::GetBackCDC();
 	CTextDraw::ChangeFontLog(pDC, 50, "微軟正黑體", RGB(255, 255, 255), 500);
-	CTextDraw::Print(pDC, 800, 200, "score：" + std::to_string(get_point));
+	CTextDraw::Print(pDC, 800, 50, "score：" + std::to_string(get_point));
 	CDDraw::ReleaseBackCDC();
 }
 
@@ -207,7 +229,11 @@ void CGameStateRun::touch_rock()
 {
 	for (int i = 0; i < 10; i++)
 	{
-		if (-(background_location_now[0]) == rock_x[i] && (-(background_location_now[1])) == rock_y[i])
+		if (muda_bool == 1)
+		{
+			speed = normal_speed;
+		}
+		else if (-(background_location_now[0]) == rock_x[i] && (-(background_location_now[1])) == rock_y[i])
 		{
 			speed = 0;
 			my_car_derect_goal += 3;
@@ -219,7 +245,7 @@ void CGameStateRun::touch_rock()
 
 void CGameStateRun::touch_flag()
 {
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		if (-(background_location_now[0]) == flag_x[i] && (-(background_location_now[1])) == flag_y[i])
 		{
@@ -234,6 +260,7 @@ void CGameStateRun::move_background()			//移動背景
 {
 	if (my_car_derect_now != my_car_derect_goal)return;
 	else speed = normal_speed;
+	touch_rock();
 	switch (my_car_derect_now)
 	{
 	case 0:
@@ -308,9 +335,9 @@ void CGameStateRun::move_background()			//移動背景
 	for (int i = 0; i < 10; i++)
 	{
 		rock[i].SetTopLeft((background_location_now[0] + rock_x[i] + 7) * my_percent + move[1] / 2 + 3, (background_location_now[1] + rock_y[i] + 7)* my_percent + move[0] / 2 + 3);
-		for(int j=0; j<10; j++)
-			flag[i*10 + j].SetTopLeft((background_location_now[0] + flag_x[i*10 + j] + 7) * my_percent + move[1] / 2 + 3, (background_location_now[1] + flag_y[i*10 + j] + 7)* my_percent + move[0] / 2 + 3);
+		flag[i].SetTopLeft((background_location_now[0] + flag_x[i] + 7) * my_percent + move[1] / 2 + 3, (background_location_now[1] + flag_y[i] + 7)* my_percent + move[0] / 2 + 3);
 	}
+	small_my_car.SetTopLeft(small_map_x - background_location_now[0] * small_map_percent, small_map_y - background_location_now[1] * small_map_percent);
 }
 
 void CGameStateRun::make_map()

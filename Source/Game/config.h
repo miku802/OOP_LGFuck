@@ -39,3 +39,4 @@
 #define map_x 0
 #define map_y 0
 #define my_percent 50
+#define flag_amount 10
