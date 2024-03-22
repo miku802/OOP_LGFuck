@@ -13,13 +13,13 @@ using namespace game_framework;
 // 這個class為遊戲的結束狀態(Game Over)
 /////////////////////////////////////////////////////////////////////////////
 
-CGameStateOver::CGameStateOver(CGame *g): CGameState(g)
+CGameStateOver::CGameStateOver(CGame *g) : CGameState(g)
 {
 }
 
 void CGameStateOver::OnMove()
 {
-	GotoGameState(GAME_STATE_INIT);
+
 }
 
 void CGameStateOver::OnBeginState()
@@ -47,5 +47,13 @@ void CGameStateOver::OnInit()
 
 void CGameStateOver::OnShow()
 {
+	CDC *pDC = CDDraw::GetBackCDC();
+
+	CTextDraw::ChangeFontLog(pDC, 15, "Arial Black", RGB(255, 255, 255), 500);
+
+	CTextDraw::Print(pDC, 350, 350, "GAME OVER");
+
+	CDDraw::ReleaseBackCDC();
 
 }
+

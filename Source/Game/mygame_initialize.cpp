@@ -25,6 +25,9 @@ void CGameStateInit::OnInit()
 	ShowInitProgress(0, "Start Initialize...");	// 一開始的loading進度為0%
 	//
 	// 開始載入資料
+	background.LoadBitmapByString({ "Resources/yellow.bmp" });
+	background.SetTopLeft(50, 0);
+
 
 	//load_background();
 
@@ -48,7 +51,7 @@ void CGameStateInit::OnBeginState()
 
 void CGameStateInit::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-
+	GotoGameState(GAME_STATE_RUN);		// 切換至GAME_STATE_RUN
 }
 
 void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
@@ -58,5 +61,16 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CGameStateInit::OnShow()
 {
-	//background.ShowBitmap();
+	background.ShowBitmap(2);
+	CDC *pDC = CDDraw::GetBackCDC();
+
+	CTextDraw::ChangeFontLog(pDC, 25, "Arial Black", RGB(255, 255, 255), 500);
+
+	CTextDraw::Print(pDC, 750, -10, "HI-SCORE");
+	CTextDraw::Print(pDC, 1025, 25, "20000");
+	CTextDraw::Print(pDC, 750, 50, "1UP");
+	CTextDraw::Print(pDC, 1045, 75, "0");
+
+	CDDraw::ReleaseBackCDC();
+
 }

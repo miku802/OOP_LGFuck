@@ -15,7 +15,7 @@
 
 using namespace game_framework;
 
-#define normal_speed 50
+#define normal_speed 20
 #define path_map1 "map1"
 #define small_map_x 755
 #define small_map_y 220
@@ -135,8 +135,11 @@ void CGameStateRun::OnShow()
 	small_my_car.ShowBitmap(0.1 * small_map_percent);
 
 	CDC *pDC = CDDraw::GetBackCDC();
-	CTextDraw::ChangeFontLog(pDC, 50, "·L³n¥¿¶ÂÅé", RGB(255, 255, 255), 500);
-	CTextDraw::Print(pDC, 800, 50, "score¡G" + std::to_string(get_point));
+	CTextDraw::ChangeFontLog(pDC, 25, "Arial Black", RGB(255, 255, 255), 500);
+	CTextDraw::Print(pDC, 750, -10, "HI-SCORE");
+	CTextDraw::Print(pDC, 1025, 25, "20000");
+	CTextDraw::Print(pDC, 750, 50, "1UP¡G");
+	CTextDraw::Print(pDC, 1075, 75, std::to_string(get_point));
 	CDDraw::ReleaseBackCDC();
 }
 
@@ -232,6 +235,7 @@ void CGameStateRun::touch_rock()
 		if (muda_bool == 1)
 		{
 			speed = normal_speed;
+			GotoGameState(GAME_STATE_OVER);
 		}
 		else if (-(background_location_now[0]) == rock_x[i] && (-(background_location_now[1])) == rock_y[i])
 		{
@@ -239,6 +243,7 @@ void CGameStateRun::touch_rock()
 			my_car_derect_goal += 3;
 			if (my_car_derect_goal == 12) { my_car_derect_goal = 0; }
 			turn_my_car();
+			//GotoGameState(GAME_STATE_OVER);
 		}
 	}
 }

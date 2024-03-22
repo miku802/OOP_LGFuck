@@ -67,7 +67,7 @@ namespace game_framework {
 	private:
 		CMovingBitmap logo;								// csieªºlogo
 		//void load_background();
-		//CMovingBitmap background;
+		CMovingBitmap background;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -117,7 +117,7 @@ namespace game_framework {
 		int flag_x[100], flag_y[100];
 		void touch_flag();
 
-		int get_point = 0;
+		int get_point = 0000;
 
 		CMovingBitmap right_black;
 
