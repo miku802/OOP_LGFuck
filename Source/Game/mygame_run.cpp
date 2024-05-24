@@ -37,20 +37,20 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	case MAP_CHOOSE:
 		break;
 	case MAP_PLAYING:
-		map[map_num1][map_num2]->move_map(my_car->get_now_derect());
-		if (map[map_num1][map_num2]->const_turn()) {
-			if (map[map_num1][map_num2]->touch_wall(my_car->get_goal_derect())) {
+		map[map_num1]->move_map(my_car->get_now_derect());
+		if (map[map_num1]->const_turn()) {
+			if (map[map_num1]->touch_wall(my_car->get_goal_derect())) {
 				my_car->set_goal_derect(my_car->get_now_derect());
 			}
 			else {
 				my_car->turn_my_car();
 			}
 		}
-		if (map[map_num1][map_num2]->touch_wall(my_car->get_now_derect()) && my_car->get_goal_derect() == my_car->get_now_derect()) {
-			if (!map[map_num1][map_num2]->touch_wall(my_car->get_now_right())) {
+		if (map[map_num1]->touch_wall(my_car->get_now_derect()) && my_car->get_goal_derect() == my_car->get_now_derect()) {
+			if (!map[map_num1]->touch_wall(my_car->get_now_right())) {
 				my_car->set_goal_derect(my_car->get_now_right());
 			}
-			else if (!map[map_num1][map_num2]->touch_wall(my_car->get_now_left())) {
+			else if (!map[map_num1]->touch_wall(my_car->get_now_left())) {
 				my_car->set_goal_derect(my_car->get_now_left());
 			}
 			else {
@@ -77,14 +77,11 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 	choose_stage_gackground.SetTopLeft(0, 0);
 	int x = 60, y = 240;
 	for (int i = 0; i < 4; i++) {
+		map[i] = std::make_shared<Map>();
+		map[i]->init_map(i + 1);
 		for (int j = 0; j < 4; j++) {
-			//map = std::make_shared<Map>();
-			map[i][j] = std::make_shared<Map>();
-			map[i][j]->init_map(i + 1, j + 1);
-
 			choose_stage_map[i][j] = std::make_shared<CMovingBitmap>();
-			//choose_stage_map[i][j]->LoadBitmapByString({ "Resources/game_init_pic/choose_stage_map" + std::to_string(i + 1) + "_" + std::to_string(j + 1) + ".bmp" });
-			choose_stage_map[i][j]->LoadBitmapByString({ "Resources/map/map" + std::to_string(i + 1) + "_" + std::to_string(j + 1) + ".bmp" });
+			choose_stage_map[i][j]->LoadBitmapByString({ "Resources/map/map" + std::to_string(i + 1) + ".bmp" });
 			choose_stage_map[i][j]->SetTopLeft(x, y);
 			x += 165;
 
@@ -195,7 +192,7 @@ void CGameStateRun::OnShow()
 		}
 		break;
 	case MAP_PLAYING:
-		map[map_num1][map_num2]->show_map();
+		map[map_num1]->show_map();
 		right_black.ShowBitmap(5);
 		my_car->show_my_car();
 		oil->show_oil();
