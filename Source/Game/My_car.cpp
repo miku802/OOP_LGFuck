@@ -56,6 +56,10 @@ void My_car::set_goal_derect(int goal_derect) {
 	}
 }
 
+void My_car::set_now_derect(int now_derect) {
+	this->now_derect = now_derect;
+}
+
 void My_car::init_my_car() {
 	my_car.LoadBitmapByString({								//我方車車
 		"Resources/My_car/mycar1.bmp",
@@ -70,7 +74,7 @@ void My_car::init_my_car() {
 		"Resources/My_car/mycar10.bmp",
 		"Resources/My_car/mycar11.bmp",
 		"Resources/My_car/mycar12.bmp"});
-	My_car::set_xy(5 * a_unit + 8, 5 * a_unit + 8);
+	My_car::set_xy(5 * a_unit + 4, 5 * a_unit + 4);
 	my_car.SetTopLeft(x, y);
 }
 
@@ -113,7 +117,7 @@ void My_car::turn_my_car() {
 
 bool My_car::turn_waiting() {
 	show_const++;
-	if (show_const > 3) {
+	if (show_const > 2) {
 		show_const = 0;
 		return true;
 	}

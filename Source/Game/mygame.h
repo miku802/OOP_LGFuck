@@ -105,16 +105,15 @@ namespace game_framework {
 		NOW_GAME_STAGE now_game_stage = MAP_CHOOSE;
 
 		std::shared_ptr<My_car> my_car;
-		std::shared_ptr<Map> map[4];
+		std::shared_ptr<Map> map;
 		std::shared_ptr<Oil> oil;
 
 		CMovingBitmap choose_stage_gackground;
 		std::shared_ptr<CMovingBitmap> choose_stage_map[4][4];
 
 		int mouse_x, mouse_y;
-		int map_num1 = 1, map_num2 = 1;
+		int map_num1 = -1, map_num2 = 1;
 
-		CMovingBitmap right_black;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
