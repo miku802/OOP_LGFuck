@@ -24,6 +24,7 @@ public:
 	//setter
 	void set_xy(int x, int y);
 	void set_goal_derect(int goal_derect);
+	void set_now_derect(int now_derect);
 	 
 	//method
 	void init_my_car();
