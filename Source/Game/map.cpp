@@ -5,7 +5,7 @@
 //44*68(32*56
 
 bool Map::const_turn() {
-	if (abs(move_x) <= 3 && abs(move_y) <= 3)
+	if (abs(move_x) <= 10 && abs(move_y) <= 10)
 		return true;
 	return false;
 }
@@ -26,12 +26,12 @@ void Map::set_speed(int speed) {
 	this->speed = speed;
 }
 
-void Map::init_map(int a, int b) {
-	map.LoadBitmapByString({"Resources/map/map" + std::to_string(a) + "_" + std::to_string(b) + ".bmp"}); //+ "_" + std::to_string(b)
+void Map::init_map(int a) {
+	map.LoadBitmapByString({"Resources/map/map" + std::to_string(a) + ".bmp"}); //+ "_" + std::to_string(b)
 	this->x = 0 - 16;
 	this->y = 0 - 50;
 	map.SetTopLeft(this->x * a_unit, this->y * a_unit);
-	Map::make_map(a, b);
+	Map::make_map(a);
 }
 
 void Map::show_map() {
@@ -109,12 +109,12 @@ void Map::move_map(int now_derect) {
 	last_derect = now_derect;
 }
 
-void Map::make_map(int a, int b) {
+void Map::make_map(int a) {
 	for (int i = 0; i < 65; i++)
 		for (int j = 0; j < 40; j++)
 			map_array[j][i] = -1;
 
-	std::ifstream map("Resources/map/map" + std::to_string(a) + "_" + std::to_string(b) + ".txt");// + "_" + std::to_string(b) 
+	std::ifstream map("Resources/map/map" + std::to_string(a) + ".txt");// + "_" + std::to_string(b) 
 	for (int i = 0; i < 58; i++)
 		for (int j = 0; j < 34; j++)
 			map >> map_array[j][i];

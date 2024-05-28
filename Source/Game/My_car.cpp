@@ -113,7 +113,7 @@ void My_car::turn_my_car() {
 
 bool My_car::turn_waiting() {
 	show_const++;
-	if (show_const > 2) {
+	if (show_const > 3) {
 		show_const = 0;
 		return true;
 	}
