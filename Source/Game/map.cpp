@@ -8,6 +8,10 @@ int Map::get_score() {
 	return score;
 }
 
+void Map::set_score(int s) {
+	score = s;
+}
+
 bool Map::const_turn() {
 	if (abs(move_x) <= 3 && abs(move_y) <= 3)
 		return true;
@@ -34,7 +38,8 @@ void Map::init_map(int a, int b) {
 
 	bang.LoadBitmapByString({ "Resources/bang.bmp" });
 	bang.SetTopLeft(5 * a_unit + 4, 5 * a_unit + 4);
-	map.LoadBitmapByString({"Resources/map/map" + std::to_string(a) + ".bmp"}); //+ "_" + std::to_string(b)
+	map.LoadBitmapByString({ "Resources/map/map1.bmp" ,"Resources/map/map2.bmp" ,"Resources/map/map3.bmp" ,"Resources/map/map4.bmp" }); //+ "_" + std::to_string(b)
+	map.SetFrameIndexOfBitmap(a - 1);
 	this->x = 0 - 16;
 	this->y = 0 - 50;
 	map.SetTopLeft(this->x * a_unit, this->y * a_unit);
@@ -114,6 +119,21 @@ void Map::show_map() {
 			small_flags[i].ShowBitmap(0.8);
 		}
 	}
+	if (add_score_wait > 0) {
+		add_score_wait++;
+
+		CDC *pDC = CDDraw::GetBackCDC();
+		CTextDraw::ChangeFontLog(pDC, 20, "Arial Black", RGB(255, 255, 255), 500);
+		CTextDraw::Print(pDC, 1100, 90, "+" + std::to_string(add_score_tmp));
+		if (add_score_wait > 30) {
+			add_score_wait = 0;
+		}
+		CDDraw::ReleaseBackCDC();
+	}
+}
+
+void Map::set_car_died(int a) {
+	died = a;
 }
 
 void Map::move_map(int now_derect) {
@@ -191,7 +211,10 @@ void Map::move_map(int now_derect) {
 	for (int i = 0; i < 10; i++) {
 		flags[i].set_xy((x + flags[i].get_x()) * a_unit + move_x, (y + flags[i].get_y()) * a_unit + move_y);
 		if (flags[i].touch_flag(-x, -y)) {
-			score+= 1000;
+			add_score_tmp = (11 - flag_amount)*(2 - died) * 100;
+			score += (11 - flag_amount)*(2 - died) * 100;
+			add_score_wait = 1;
+			flag_amount--;
 		}
 		//flags[i].set_xy(x * a_unit + move_x, y * a_unit + move_y);
 	}
@@ -214,4 +237,21 @@ bool Map::show_bang() {
 		}
 	}
 	return false;
+}
+
+void Map::reset() {
+	move_x = 0;
+	move_y = 0;
+	flag_amount = 10;
+	speed = normal_speed;
+	for (int i = 0; i < 10; i++) {
+		flags[i].reset();
+	}
+	for (int i = 0; i < stone_amount; i++) {
+		stone[i].reset();
+	}
+}
+
+int Map::get_flag_amount() {
+	return flag_amount;
 }

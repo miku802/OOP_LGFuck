@@ -41,3 +41,7 @@ bool Flag::touch_flag(int x, int y) {
 	}
 	return false;
 }
+
+void Flag::reset() {
+	touched = false;
+}

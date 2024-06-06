@@ -21,7 +21,7 @@ public:
 	void set_xy(int x, int y);
 	void show_flag();
 	bool touch_flag(int x, int y);
-	void regame();
+	void reset();
 
 private:
 	CMovingBitmap flag;

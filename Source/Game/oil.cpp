@@ -24,3 +24,7 @@ void Oil::show_oil() {
 void Oil::oil_decrease(int i) {
 	oil -= i;
 }
+
+void Oil::reset() {
+	oil = 10000;
+}

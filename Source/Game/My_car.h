@@ -30,6 +30,7 @@ public:
 	void init_my_car();
 	void show_my_car();
 	void turn_my_car();
+	void reset();
 
 protected:
 	bool turn_waiting();

@@ -19,6 +19,7 @@ public:
 	void set_xy(int x, int y);
 	void show_stone();
 	bool touch_stone(int x, int y);
+	void reset();
 
 private:
 	CMovingBitmap stone	;

@@ -3,11 +3,13 @@
 #ifndef	MAP_H
 
 #define MAP_H
-#define normal_speed 20
+#define normal_speed 15
 #include "../Library/gameutil.h"
 #include "config.h"
 #include "flag.h"
 #include "stone.h"
+#include <ddraw.h>
+#include "../Library/gamecore.h"
 
 using namespace game_framework;
 
@@ -15,6 +17,7 @@ class Map :public CMovingBitmap {
 public:
 	Map() {};
 	int get_score();
+	void set_score(int s);
 	bool const_turn();
 	bool touch_wall(int now_derect);
 	void set_speed(int speed);
@@ -25,6 +28,9 @@ public:
 	void make_flags(int a, int b);
 	void make_stone(int a, int b);
 	bool show_bang();
+	void reset();
+	int get_flag_amount();
+	void set_car_died(int a);
 
 	//small map
 	void init_small_map();
@@ -46,6 +52,10 @@ private:
 	int move_y = 0;
 	int speed = normal_speed;
 	int map_array[40][65];
+	int flag_amount = 10;
+	int died = 0;
+	int add_score_wait = 0;
+	int add_score_tmp = 0;
 
 	//small map
 	CMovingBitmap small_map_background;

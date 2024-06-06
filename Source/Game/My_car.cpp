@@ -123,3 +123,12 @@ bool My_car::turn_waiting() {
 	}
 	return false;
 }
+
+void My_car::reset() {
+	my_car.SetFrameIndexOfBitmap(0);
+	goal_derect = 0;
+	now_derect = 0;
+	show_derect = 0;
+	show_const = 0;
+
+}

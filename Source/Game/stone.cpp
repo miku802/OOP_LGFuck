@@ -33,3 +33,8 @@ bool Stone::touch_stone(int x, int y) {
 	}
 	return false;
 }
+
+void Stone::reset() {
+	touched = false;
+	stone.SetTopLeft(-100, -100);
+}

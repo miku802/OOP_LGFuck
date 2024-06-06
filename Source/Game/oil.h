@@ -14,6 +14,7 @@ public:
 	void oil_init();
 	void show_oil();
 	void oil_decrease(int i);
+	void reset();
 
 private:
 	CMovingBitmap oil_now[250];
