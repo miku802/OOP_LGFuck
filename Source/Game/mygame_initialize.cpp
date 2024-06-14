@@ -19,7 +19,8 @@ CGameStateInit::CGameStateInit(CGame *g) : CGameState(g)
 
 void CGameStateInit::OnInit()
 {
-
+	background.LoadBitmapByString({ "Resources/start_background.bmp" });
+	background.SetTopLeft(0, 0);
 }
 
 void CGameStateInit::OnBeginState()
@@ -38,4 +39,5 @@ void CGameStateInit::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CGameStateInit::OnShow()
 {
+	background.ShowBitmap();
 }

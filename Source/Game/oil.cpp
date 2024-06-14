@@ -2,6 +2,14 @@
 #include "oil.h"
 #include <fstream>
 
+int Oil::get_oil() {
+	return oil;
+}
+
+void Oil::decrease() {
+	oil -= 500;
+}
+
 void Oil::oil_init() {
 	for (int i = 0; i < 200; i++)
 	{

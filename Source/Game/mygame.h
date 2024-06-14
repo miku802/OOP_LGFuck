@@ -78,6 +78,7 @@ namespace game_framework {
 		void OnShow();									// 顯示這個狀態的遊戲畫面
 	private:
 		CMovingBitmap logo;								// csie的logo
+		CMovingBitmap background;
 	};
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -110,9 +111,9 @@ namespace game_framework {
 		std::shared_ptr<Map> map;
 		std::shared_ptr<Oil> oil;
 
-		CMovingBitmap choose_stage_gackground;
 		CMovingBitmap life_pic[4];
 		std::shared_ptr<CMovingBitmap> choose_stage_map[4][4];
+		std::shared_ptr<CMovingBitmap> black;
 
 		int mouse_x, mouse_y;
 		int map_num1 = 1, map_num2 = 0;

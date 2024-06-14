@@ -37,7 +37,7 @@ void CGameStateRun::OnMove()							// 移動遊戲元素
 	case MAP_CHOOSE:
 		break;
 	case MAP_PLAYING:
-		map->move_map(my_car->get_now_derect());
+		map->move_map(my_car->get_now_derect(), oil->get_oil());
 		if (map->const_turn()) {
 			if (map->touch_wall(my_car->get_goal_derect())) {
 				my_car->set_goal_derect(my_car->get_now_derect());
@@ -75,8 +75,6 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 	map = std::make_shared<Map>();
 
-	choose_stage_gackground.LoadBitmapByString({ "Resources/game_init_pic/choose_stage_background.bmp" });
-	choose_stage_gackground.SetTopLeft(0, 0);
 	int x = 60, y = 240;
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
@@ -93,11 +91,14 @@ void CGameStateRun::OnInit()  								// 遊戲的初值及圖形設定
 
 	for (int i = 0; i < 4; i++) {
 		life_pic[i].LoadBitmapByString({ "Resources/life.bmp" });
-		life_pic[i].SetTopLeft(930 + i*80, 800);
+		life_pic[i].SetTopLeft(930 + i * 80, 800);
 	}
 
 	oil = std::make_shared<Oil>();
 	oil->oil_init();
+
+	black = std::make_shared<CMovingBitmap>();
+	black->LoadBitmapByString({ "Resources/black.bmp" });
 }
 
 void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -113,6 +114,10 @@ void CGameStateRun::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 	if (nChar == 0x44) {		//d
 		my_car->set_goal_derect(3);
+	}
+	if (nChar == 0x46) {		//d
+		map->use_skill();
+		oil->decrease();
 	}
 	if (nChar == 0x50) {		//p
 		skip = true;
@@ -228,6 +233,9 @@ void CGameStateRun::OnShow()
 		map->show_map();
 		oil->show_oil();
 		my_car->show_my_car();
+		if (oil->get_oil() <= 1) {
+			map->slow_down();
+		}
 		if (map->show_bang()) {
 			my_car->reset();
 			map_num2--;
@@ -243,10 +251,11 @@ void CGameStateRun::OnShow()
 			skip = false;
 			map_win_wait = 0;
 			reset();
+			black->ShowBitmap(10);
 			now_game_stage = MAP_CHOOSE;
 		}
 		for (int i = 0; i < 4; i++) {
-			if (i > life-1) {
+			if (i > life-1 || now_game_stage == MAP_CHOOSE) {
 				break;
 			}
 			life_pic[i].ShowBitmap(0.8);
